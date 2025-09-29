@@ -3,6 +3,8 @@ using DataAccess.Repositories;
 using DataAccess.Repositories.IRepositories;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Utility;
+using Utility.DBInitializer;
 
 namespace MeenA7rf
 {
@@ -19,6 +21,10 @@ namespace MeenA7rf
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Email Sender
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+            builder.Services.AddScoped<IDBInitializer, DBInitializer>();
 
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
