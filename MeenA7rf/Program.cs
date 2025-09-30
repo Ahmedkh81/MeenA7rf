@@ -1,6 +1,8 @@
 using DataAccess.Data;
 using DataAccess.Repositories;
 using DataAccess.Repositories.IRepositories;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Utility;
@@ -23,6 +25,20 @@ namespace MeenA7rf
 
             // Email Sender
             builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+            // Identity
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
+            {
+                option.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            });
 
             builder.Services.AddScoped<IDBInitializer, DBInitializer>();
 
@@ -53,10 +69,12 @@ namespace MeenA7rf
             app.UseAuthorization();
 
             app.MapStaticAssets();
+            // Default route
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
+                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
+
+
 
             app.Run();
         }

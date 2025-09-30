@@ -1,0 +1,238 @@
+﻿<main class="main-content">
+    <header class="dashboard-header">Admin Dashboard 🏆</header>
+
+    <!-- Stats Cards -->
+    <section class="stats-container">
+        <div class="stat-card">
+            <div class="stat-icon">👤</div>
+            <h3>Total Users</h3>
+            <div class="stat-number" id="userCount">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏟️</div>
+            <h3>Total Rooms</h3>
+            <div class="stat-number" id="roomCount">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">❓</div>
+            <h3>Total Questions</h3>
+            <div class="stat-number" id="questionCount">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <h3>Total Answers</h3>
+            <div class="stat-number" id="answerCount">0</div>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="charts-section">
+        <h2>Statistics Overview</h2>
+        <div class="charts-grid">
+            <canvas id="activityChart" width="400" height="300"></canvas>
+            <canvas id="distributionChart" width="400" height="300"></canvas>
+        </div>
+    </section>
+
+    <style>
+        .dashboard-header {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+            text-align: center;
+            text-shadow: 0 0 15px #ffd700;
+            animation: fadeInDown 1s ease;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(20,20,20,0.9), rgba(40,40,40,0.8));
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255,215,0,0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .stat-card:hover {
+                transform: translateY(-10px) scale(1.05);
+                box-shadow: 0 0 35px rgba(255,215,0,0.8);
+            }
+
+        .stat-icon {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        .stat-card h3 {
+            font-size: 1.2rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 12px #ffd700;
+        }
+
+        .charts-section {
+            margin-top: 60px;
+            text-align: center;
+        }
+
+            .charts-section h2 {
+                margin-bottom: 25px;
+                font-size: 1.8rem;
+                text-shadow: 0 0 10px #ffd700;
+                animation: fadeIn 1s ease;
+            }
+
+        .charts-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        canvas {
+            background: rgba(20,20,20,0.7);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(255,215,0,0.3);
+        }
+
+        /* Animations */
+        @@keyframes fadeInDown {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+        @@keyframes fadeInUp {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+
+        }
+        @@keyframes bounce {
+            0%, 100%
+
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-5px);
+        }
+
+        }
+    </style>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Animate numbers
+        function animateValue(id, start, end, duration) {
+            let range = end - start;
+            let current = start;
+            let increment = end > start ? 1 : -1;
+            let stepTime = Math.abs(Math.floor(duration / range));
+            let obj = document.getElementById(id);
+            let timer = setInterval(function () {
+                current += increment;
+                obj.textContent = current;
+                if (current == end) clearInterval(timer);
+            }, stepTime);
+        }
+
+        animateValue("userCount", 0, 45, 1500);
+        animateValue("roomCount", 0, 12, 1500);
+        animateValue("questionCount", 0, 120, 1500);
+        animateValue("answerCount", 0, 350, 1500);
+
+        // Bar Chart (Fixed Size)
+        const ctx1 = document.getElementById('activityChart');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Users', 'Rooms', 'Questions', 'Answers'],
+                datasets: [{
+                    label: 'Activity Count',
+                    data: [45, 12, 120, 350],
+                    backgroundColor: ['#ffd700', '#ffbb00', '#ffaa00', '#ff8800'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: false,  // 🔥 Disable auto resize
+                plugins: {
+                    legend: { labels: { color: '#fff' } }
+                },
+                scales: {
+                    x: { ticks: { color: '#fff' } },
+                    y: { ticks: { color: '#fff' } }
+                }
+            }
+        });
+
+        // Pie Chart (Fixed Size)
+        const ctx2 = document.getElementById('distributionChart');
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: ['Users', 'Rooms', 'Questions', 'Answers'],
+                datasets: [{
+                    data: [45, 12, 120, 350],
+                    backgroundColor: ['#ffd700', '#ffbb00', '#ffaa00', '#ff8800'],
+                    borderWidth: 2,
+                    borderColor: '#222'
+                }]
+            },
+            options: {
+                responsive: false,  // 🔥 Disable auto resize
+                plugins: {
+                    legend: { labels: { color: '#fff', font: { size: 14 } } }
+                }
+            }
+        });
+    </script>
+</main>

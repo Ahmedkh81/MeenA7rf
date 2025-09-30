@@ -1,50 +1,318 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MeenA7rf</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MeenA7rf.styles.css" asp-append-version="true" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - MeenA7rf Football Quiz</title>
+    <style>
+        /* Reset & base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            background: url('/images/football-bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+        }
+
+        /* Layout */
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #FFD700;
+            box-shadow: 0 0 15px #FFD700;
+        }
+
+            header .logo {
+                font-size: 1.8rem;
+                font-weight: 700;
+                color: #FFD700;
+                letter-spacing: 2px;
+                cursor: default;
+                user-select: none;
+            }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            gap: 25px;
+        }
+
+            nav ul li a {
+                text-decoration: none;
+                color: #fff;
+                font-weight: 600;
+                padding: 6px 14px;
+                transition: background-color 0.3s ease, color 0.3s ease;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+                nav ul li a:hover {
+                    background-color: #FFD700;
+                    color: #000;
+                }
+
+        /* Main wrapper */
+        #main-content {
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+       
+
+        body, html {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: url('/images/football-bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+        }
+
+        #main-content {
+            flex: 1; /* يخلي الكونتنت يتمدد ويدفع الفوتر لتحت */
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        footer {
+            background: rgba(0,0,0,0.75);
+            padding: 15px 0;
+            text-align: center;
+            color: #bbb;
+            font-size: 0.9rem;
+            border-top: 3px solid #FFD700;
+        }
+
+        /* Icons */
+        .icon-home::before {
+            content: "🏠";
+        }
+
+        .icon-rooms::before {
+            content: "📂";
+        }
+
+        .icon-login::before {
+            content: "🔐";
+        }
+
+        .icon-register::before {
+            content: "📝";
+        }
+
+        .icon-users::before {
+            content: "👥";
+        }
+
+        .icon-gamepad::before {
+            content: "🎮";
+        }
+
+        .icon-join::before {
+            content: "🔗";
+        }
+    </style>
 </head>
 <body>
+
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MeenA7rf</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <div class="logo">MeenA7rf Quiz ⚽</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="icon-home">Home</a></li>
+                <li><a href="#" class="icon-rooms">Rooms</a></li>
+                <li><a href="#" class="icon-login">Login</a></li>
+                <li><a href="#" class="icon-register">Register</a></li>
+            </ul>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+    <style>
+        /* ===== Modern Header ===== */
+        header {
+            background: rgba(20, 20, 20, 0.6); /* شفافية */
+            backdrop-filter: blur(10px); /* بلور خلفي */
+            -webkit-backdrop-filter: blur(10px);
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 50px; /* rounded big */
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            margin: 20px auto;
+            max-width: 1100px; /* يخلي البار في النص */
+            position: sticky;
+            top: 15px; /* يثبت فوق */
+            z-index: 100;
+        }
+
+            /* ===== Logo Animation ===== */
+            header .logo {
+                font-size: 1.7rem;
+                font-weight: 700;
+                color: #FFD700;
+                letter-spacing: 1.5px;
+                cursor: default;
+                user-select: none;
+                text-shadow: 0 0 6px #FFD700, 0 0 12px rgba(255,215,0,0.7);
+                opacity: 0;
+                transform: translateX(-40px);
+                animation: slideLogo 1s ease forwards;
+            }
+
+        /* ===== Nav Links ===== */
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            gap: 18px;
+        }
+
+            nav ul li {
+                opacity: 0;
+                transform: translateY(-20px);
+                animation: fadeUp 0.8s ease forwards;
+            }
+
+                nav ul li:nth-child(1) {
+                    animation-delay: 0.3s;
+                }
+
+                nav ul li:nth-child(2) {
+                    animation-delay: 0.5s;
+                }
+
+                nav ul li:nth-child(3) {
+                    animation-delay: 0.7s;
+                }
+
+                nav ul li:nth-child(4) {
+                    animation-delay: 0.9s;
+                }
+
+                nav ul li a {
+                    text-decoration: none;
+                    color: #fff;
+                    font-weight: 600;
+                    padding: 8px 18px;
+                    border-radius: 30px; /* كبسولة */
+                    transition: all 0.3s ease;
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid transparent;
+                }
+
+                    nav ul li a:hover {
+                        color: #FFD700;
+                        background: rgba(255, 215, 0, 0.15);
+                        border: 1px solid #FFD700;
+                        box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+                    }
+
+        /* ===== Animations ===== */
+        @@keyframes slideLogo {
+            to
+
+        {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        }
+
+        @@keyframes fadeUp {
+            to
+
+        {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+    </style>
+
+
+
+
+    <!-- مكان حقن المحتوى -->
+    <div id="main-content">
+        @RenderBody()
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - MeenA7rf - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 - MeenA7rf Football Quiz</p>
+            <div class="social-icons">
+                <a href="#" aria-label="Facebook" title="Facebook">📘</a>
+                <a href="#" aria-label="Twitter" title="Twitter">🐦</a>
+                <a href="#" aria-label="Instagram" title="Instagram">📸</a>
+            </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    <style>
+        footer {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px 0;
+            text-align: center;
+            color: #bbb;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 215, 0, 0.5);
+            margin-top: 50px;
+            border-radius: 30px 30px 0 0; /* rounded top */
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+            footer .footer-content {
+                max-width: 1100px;
+                margin: auto;
+            }
+
+            footer .social-icons {
+                margin-top: 10px;
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+            }
+
+                footer .social-icons a {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 38px;
+                    height: 38px;
+                    border-radius: 50%;
+                    background: rgba(255, 215, 0, 0.1);
+                    border: 1px solid transparent;
+                    color: #FFD700;
+                    font-size: 1.1rem;
+                    transition: all 0.3s ease;
+                }
+
+                    footer .social-icons a:hover {
+                        background: rgba(255, 215, 0, 0.2);
+                        border: 1px solid #FFD700;
+                        color: #fff;
+                        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+                    }
+    </style>
+
+
 </body>
 </html>
