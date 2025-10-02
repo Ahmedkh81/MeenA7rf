@@ -51,6 +51,7 @@ namespace MeenA7rf
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
             builder.Services.AddScoped<IAnswerOptionRepository, AnswerOptionRepository>();
             builder.Services.AddScoped<IMatchResultRepository, MatchResultRepository>();
+            builder.Services.AddScoped<IApplicationUserOTPRepository, ApplicationUserOTPRepository>();
 
 
             var app = builder.Build();
@@ -74,7 +75,12 @@ namespace MeenA7rf
                 name: "default",
                 pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
-
+            // Initialize Database & Seed Data
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbInitializer = scope.ServiceProvider.GetRequiredService<IDBInitializer>();
+                dbInitializer.Initialize();
+            }
 
             app.Run();
         }

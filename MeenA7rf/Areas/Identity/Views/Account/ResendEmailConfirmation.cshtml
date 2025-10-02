@@ -1,0 +1,91 @@
+﻿@using Entities.ViewModels
+@model ResendEmailConfirmationVM
+
+<div class="resend-container">
+    <div class="resend-card">
+        <h2 class="resend-title">Resend Email Confirmation 📧</h2>
+        <p class="resend-subtitle">Enter your username or email to get a new confirmation link.</p>
+
+        <form asp-action="ResendEmailConfirmation" method="post">
+            <div class="form-group">
+                <label asp-for="UserNameOrEmail"></label>
+                <input asp-for="UserNameOrEmail" class="form-control" placeholder="Enter Username or Email" />
+                <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn-resend">Resend Confirmation</button>
+
+            <p class="resend-footer">
+                Already confirmed? <a asp-action="Login" asp-controller="Account" asp-area="Identity" style="color:#ffdf00;">Login here</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .resend-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            background: url('/images/stadium-bg.jpg') no-repeat center center/cover;
+        }
+
+        .resend-card {
+            background: rgba(0,0,0,0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 223, 0, 0.7);
+            width: 400px;
+            text-align: center;
+        }
+
+        .resend-title {
+            color: #ffdf00;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .resend-subtitle {
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        .btn-resend {
+            width: 100%;
+            padding: 12px;
+            background-color: #ffdf00;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .btn-resend:hover {
+                background-color: #ffd600;
+                transform: scale(1.05);
+            }
+
+        .resend-footer {
+            margin-top: 15px;
+            color: #ccc;
+        }
+    </style>
+}
+

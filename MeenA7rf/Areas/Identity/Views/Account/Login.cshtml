@@ -1,0 +1,138 @@
+﻿@using Entities.ViewModels
+@model LoginVM
+
+<div class="login-container">
+    <div class="login-card">
+        <h2 class="login-title">Welcome Back ⚽</h2>
+        <p class="login-subtitle">Login to continue your MeenA7rf journey!</p>
+
+        <form asp-action="Login" method="post">
+            <div class="form-group">
+                <label asp-for="UserNameOrEmail"></label>
+                <input asp-for="UserNameOrEmail" class="form-control" placeholder="Enter Username or Email" />
+                <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" placeholder="Enter Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group remember-me">
+                <input asp-for="RememberMe" type="checkbox" />
+                <label asp-for="RememberMe">Remember me</label>
+            </div>
+
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+
+        @* زرار يظهر فقط لو الايميل مش confirmed *@
+        @if (ViewBag.ShowResendButton == true)
+        {
+            <form asp-action="ResendEmailConfirmation" method="post" style="margin-top:15px;">
+                <input type="hidden" name="UserNameOrEmail" value="@Model.UserNameOrEmail" />
+                <button type="submit" class="btn-resend">Resend Email Confirmation</button>
+            </form>
+        }
+
+        <p class="login-footer">
+            Don’t have an account? <a asp-action="Register" style="color:#ffdf00;">Register here</a>
+        </p>
+        <p class="login-footer">
+            Forgot your password? <a asp-action="ForgotPassword" style="color:#ffdf00;">Click here</a>
+        </p>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            background: url('/images/stadium-bg.jpg') no-repeat center center/cover;
+        }
+
+        .login-card {
+            background: rgba(0,0,0,0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 223, 0, 0.7);
+            width: 400px;
+            text-align: center;
+        }
+
+        .login-title {
+            color: #ffdf00;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .btn-login, .btn-resend {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-login {
+            background-color: #ffdf00;
+        }
+
+            .btn-login:hover {
+                background-color: #ffd600;
+                transform: scale(1.05);
+            }
+
+        .btn-resend {
+            margin-top: 10px;
+            background-color: #007bff;
+            color: #fff;
+        }
+
+            .btn-resend:hover {
+                background-color: #0056b3;
+                transform: scale(1.05);
+            }
+
+        .login-footer {
+            margin-top: 15px;
+            color: #ccc;
+        }
+
+            .login-footer a {
+                font-weight: bold;
+            }
+    </style>
+}

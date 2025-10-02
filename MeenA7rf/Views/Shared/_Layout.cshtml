@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    @RenderSection("Styles", required: false)
     <title>@ViewData["Title"] - MeenA7rf Football Quiz</title>
     <style>
         /* Reset & base */
@@ -15,65 +16,6 @@
 
         body, html {
             height: 100%;
-            background: url('/images/football-bg.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: #fff;
-        }
-
-        /* Layout */
-        header {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px solid #FFD700;
-            box-shadow: 0 0 15px #FFD700;
-        }
-
-            header .logo {
-                font-size: 1.8rem;
-                font-weight: 700;
-                color: #FFD700;
-                letter-spacing: 2px;
-                cursor: default;
-                user-select: none;
-            }
-
-        nav ul {
-            list-style-type: none;
-            display: flex;
-            gap: 25px;
-        }
-
-            nav ul li a {
-                text-decoration: none;
-                color: #fff;
-                font-weight: 600;
-                padding: 6px 14px;
-                transition: background-color 0.3s ease, color 0.3s ease;
-                border-radius: 6px;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-            }
-
-                nav ul li a:hover {
-                    background-color: #FFD700;
-                    color: #000;
-                }
-
-        /* Main wrapper */
-        #main-content {
-            max-width: 950px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-
-       
-
-        body, html {
-            height: 100%;
             display: flex;
             flex-direction: column;
             background: url('/images/football-bg.jpg') no-repeat center center fixed;
@@ -81,106 +23,57 @@
             color: #fff;
         }
 
-        #main-content {
-            flex: 1; /* يخلي الكونتنت يتمدد ويدفع الفوتر لتحت */
-            max-width: 950px;
-            margin: 40px auto;
-            padding: 20px;
-            width: 100%;
-        }
-
-        footer {
-            background: rgba(0,0,0,0.75);
-            padding: 15px 0;
-            text-align: center;
-            color: #bbb;
-            font-size: 0.9rem;
-            border-top: 3px solid #FFD700;
-        }
-
-        /* Icons */
-        .icon-home::before {
-            content: "🏠";
-        }
-
-        .icon-rooms::before {
-            content: "📂";
-        }
-
-        .icon-login::before {
-            content: "🔐";
-        }
-
-        .icon-register::before {
-            content: "📝";
-        }
-
-        .icon-users::before {
-            content: "👥";
-        }
-
-        .icon-gamepad::before {
-            content: "🎮";
-        }
-
-        .icon-join::before {
-            content: "🔗";
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <div class="logo">MeenA7rf Quiz ⚽</div>
-        <nav>
-            <ul>
-                <li><a href="#" class="icon-home">Home</a></li>
-                <li><a href="#" class="icon-rooms">Rooms</a></li>
-                <li><a href="#" class="icon-login">Login</a></li>
-                <li><a href="#" class="icon-register">Register</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <style>
-        /* ===== Modern Header ===== */
+        /* Header - Fixed positioning to prevent scrolling overlap */
         header {
-            background: rgba(20, 20, 20, 0.6); /* شفافية */
-            backdrop-filter: blur(10px); /* بلور خلفي */
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             padding: 12px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-radius: 50px; /* rounded big */
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            margin: 20px auto;
-            max-width: 1100px; /* يخلي البار في النص */
-            position: sticky;
-            top: 15px; /* يثبت فوق */
+            border-radius: 50px;
+            box-shadow: 0 4px 25px rgba(255, 215, 0, 0.7);
+            border: 1px solid rgba(255, 215, 0, 0.6);
+            position: fixed;
+            top: 20px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            max-width: 1100px;
             z-index: 100;
+            backdrop-filter: blur(10px);
+            /* Transition for smooth show/hide */
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+            will-change: transform, opacity;
         }
+            /* حالة الإخفاء (الانزلاق للأعلى مع شفافية صفر) */
+            header.hide {
+                transform: translateY(-120%);
+                opacity: 0;
+            }
 
-            /* ===== Logo Animation ===== */
             header .logo {
-                font-size: 1.7rem;
+                font-size: 1.9rem;
                 font-weight: 700;
                 color: #FFD700;
                 letter-spacing: 1.5px;
                 cursor: default;
                 user-select: none;
-                text-shadow: 0 0 6px #FFD700, 0 0 12px rgba(255,215,0,0.7);
+                text-shadow: 0 0 8px #FFD700, 0 0 20px rgba(255,215,0,0.9);
                 opacity: 0;
                 transform: translateX(-40px);
                 animation: slideLogo 1s ease forwards;
             }
 
-        /* ===== Nav Links ===== */
         nav ul {
             list-style-type: none;
             display: flex;
-            gap: 18px;
+            gap: 20px;
+            background: rgba(0,0,0, 0.25);
+            padding: 10px 20px;
+            border-radius: 40px;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
         }
 
             nav ul li {
@@ -209,21 +102,25 @@
                     text-decoration: none;
                     color: #fff;
                     font-weight: 600;
-                    padding: 8px 18px;
-                    border-radius: 30px; /* كبسولة */
+                    padding: 8px 20px;
+                    border-radius: 30px;
                     transition: all 0.3s ease;
-                    background: rgba(255, 255, 255, 0.05);
+                    background: rgba(255, 215, 0, 0.15);
                     border: 1px solid transparent;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    box-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
                 }
 
                     nav ul li a:hover {
-                        color: #FFD700;
-                        background: rgba(255, 215, 0, 0.15);
+                        color: #000;
+                        background: #FFD700; /* قوي */
                         border: 1px solid #FFD700;
-                        box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+                        box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
                     }
 
-        /* ===== Animations ===== */
+        /* Animations */
         @@keyframes slideLogo {
             to
 
@@ -243,40 +140,46 @@
         }
 
         }
-    </style>
 
+        /* Main wrapper */
+        #main-content {
+            flex: 1;
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 160px 20px 20px; /* To clear fixed header */
+            width: 100%;
+        }
 
+        /* Icons */
+        .icon-home::before {
+            content: "🏠";
+        }
 
+        .icon-rooms::before {
+            content: "📂";
+        }
 
-    <!-- مكان حقن المحتوى -->
-    <div id="main-content">
-        @RenderBody()
-    </div>
+        .icon-login::before {
+            content: "🔐";
+        }
 
-    <footer>
-        <div class="footer-content">
-            <p>© 2025 - MeenA7rf Football Quiz</p>
-            <div class="social-icons">
-                <a href="#" aria-label="Facebook" title="Facebook">📘</a>
-                <a href="#" aria-label="Twitter" title="Twitter">🐦</a>
-                <a href="#" aria-label="Instagram" title="Instagram">📸</a>
-            </div>
-        </div>
-    </footer>
+        .icon-register::before {
+            content: "📝";
+        }
 
-    <style>
+        /* Footer */
         footer {
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             padding: 20px 0;
             text-align: center;
             color: #bbb;
             font-size: 0.9rem;
-            border-top: 1px solid rgba(255, 215, 0, 0.5);
+            border-top: 1px solid rgba(255, 215, 0, 0.6);
             margin-top: 50px;
-            border-radius: 30px 30px 0 0; /* rounded top */
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -4px 20px rgba(255, 215, 0, 0.4);
         }
 
             footer .footer-content {
@@ -298,21 +201,193 @@
                     width: 38px;
                     height: 38px;
                     border-radius: 50%;
-                    background: rgba(255, 215, 0, 0.1);
+                    background: rgba(255, 215, 0, 0.15);
                     border: 1px solid transparent;
                     color: #FFD700;
-                    font-size: 1.1rem;
+                    font-size: 1.2rem;
                     transition: all 0.3s ease;
                 }
 
                     footer .social-icons a:hover {
-                        background: rgba(255, 215, 0, 0.2);
+                        background: rgba(255, 215, 0, 0.3);
                         border: 1px solid #FFD700;
                         color: #fff;
-                        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+                        box-shadow: 0 0 12px rgba(255, 215, 0, 0.7);
                     }
     </style>
+</head>
+<body>
+    <header id="navbar">
+        <div class="logo">MeenA7rf Quiz ⚽</div>
+        <nav>
+            <ul>
+                <li><a asp-action="Index" asp-controller="Home" asp-area="Customer" class="icon-home">Home</a></li>
+
+                @if(User.Identity!.IsAuthenticated)
+                {
+                    <li><a href="#">👤 Friends</a></li>
+                    <li><a href="#">🧑 Profile</a></li>
+                    <li><a asp-action="Signout" asp-controller="Account" asp-area="Identity" class="icon-login">Signout</a></li>
+                }
+                else
+                {
+                    <li><a asp-action="Login" asp-controller="Account" asp-area="Identity" class="icon-login">Login</a></li>
+                    <li><a asp-action="Register" asp-controller="Account" asp-area="Identity" class="icon-register">Register</a></li>  
+                }
+            </ul>
+        </nav>
+    </header>
+
+    <!-- مكان حقن المحتوى -->
+    <div id="main-content">
+        @RenderBody()
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 - MeenA7rf Football Quiz</p>
+            <p>Created by Ahmed Khaled Mohamed</p>
+            <p>MeenA7rf is a fun football quiz game where friends can challenge each other and test their football knowledge! ⚽🧠</p>
+            <div class="social-icons">
+                <a href="#" aria-label="Facebook" title="Facebook">📘</a>
+                <a href="#" aria-label="Twitter" title="Twitter">🐦</a>
+                <a href="#" aria-label="Instagram" title="Instagram">📸</a>
+            </div>
+        </div>
+    </footer>
+
+    
 
 
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        // كود لجعل الـnavbar يختفي عند النزول ويظهر عند الصعود بتأثير انسيابي
+
+        (function() {
+            const navbar = document.getElementById('navbar');
+            let lastScrollTop = 0;
+            let ticking = false;
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+                        if (scrollTop > lastScrollTop && scrollTop > 100) {
+                            // Scroll Down - Hide navbar
+                            navbar.classList.add('hide');
+                        } else {
+                            // Scroll Up - Show navbar
+                            navbar.classList.remove('hide');
+                        }
+
+                        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        })();
+    </script>
+
+    <!-- Toaster Container (حطه في الـ _Layout.cshtml تحت <body> على طول) -->
+    <div id="custom-toaster"></div>
+
+    <style>
+        /* 🎨 تصميم التوستر */
+        #custom-toaster {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .toast-msg {
+            min-width: 280px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: slideIn 0.6s ease, fadeOut 0.6s ease 3.5s forwards;
+            position: relative;
+        }
+
+            .toast-msg.success {
+                background: linear-gradient(135deg, #28a745, #1e7e34);
+            }
+
+            .toast-msg.error {
+                background: linear-gradient(135deg, #dc3545, #a71d2a);
+            }
+
+            .toast-msg .icon {
+                font-size: 1.5rem;
+            }
+
+        @@keyframes slideIn {
+            from
+
+        {
+            transform: translateX(120%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes fadeOut {
+            to
+
+        {
+            transform: translateX(120%);
+            opacity: 0;
+        }
+
+        }
+    </style>
+
+    <script>
+        function showToaster(message, type) {
+            const toaster = document.getElementById("custom-toaster");
+
+            // اختر أيقونة حسب النوع
+            let icon = type === "success" ? "⚽" : "🚫";
+
+            const toast = document.createElement("div");
+            toast.className = `toast-msg ${type}`;
+            toast.innerHTML = `<span class="icon">${icon}</span> <span>${message}</span>`;
+
+            toaster.appendChild(toast);
+
+            // حذف بعد 4 ثواني
+            setTimeout(() => {
+                toast.remove();
+            }, 4000);
+        }
+
+        // ✅ ده بيقرأ TempData من السيرفر (حطه في _Layout.cshtml تحت السكربتات)
+        document.addEventListener("DOMContentLoaded", function () {
+            var success = '@TempData["success-notification"]';
+            var error = '@TempData["error-notification"]';
+
+            if (success) showToaster(success, "success");
+            if (error) showToaster(error, "error");
+        });
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,218 @@
+﻿@using Entities.ViewModels
+@model RegisterVM
+
+<div class="register-container">
+    <div class="register-card">
+        <h2 class="register-title">Create Your Account ⚽</h2>
+        <p class="register-subtitle">Join MeenA7rf and test your football knowledge!</p>
+
+        <form asp-action="Register" method="post" onsubmit="return validateTerms()">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" placeholder="Enter First Name" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" placeholder="Enter Last Name" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control" placeholder="Choose a Username" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" placeholder="Enter Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" placeholder="Enter Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ConfirmPassword"></label>
+                <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <!-- Terms & Policies -->
+            <div class="form-group terms-box">
+                <input type="checkbox" id="agreeTerms" />
+                <label for="agreeTerms">
+                    I agree to the
+                    <a href="javascript:void(0)" onclick="openModal()">Terms & Policies</a>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-register">Register</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="termsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>MeenA7rf Terms & Policies ⚽</h2>
+        <p>
+            Welcome to <strong>MeenA7rf</strong> – a fun football quiz and challenge game between friends.
+        </p>
+        <ul>
+            <li>✔ You must provide accurate account information.</li>
+            <li>✔ Respect other players – no cheating or offensive behavior.</li>
+            <li>✔ The game is for fun, learning, and friendly competition.</li>
+            <li>✔ MeenA7rf may update these terms from time to time.</li>
+            <li>✔ By registering, you agree to fair play and community respect.</li>
+        </ul>
+        <p>
+            If you do not agree with these terms, you should not register an account.
+            Enjoy the game and may the best football brain win! 🏆
+        </p>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .register-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            background: url('/images/stadium-bg.jpg') no-repeat center center/cover;
+        }
+
+        .register-card {
+            background: rgba(0,0,0,0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 223, 0, 0.7);
+            width: 400px;
+            text-align: center;
+        }
+
+        .register-title {
+            color: #ffdf00;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .register-subtitle {
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        .terms-box {
+            font-size: 14px;
+            color: #ddd;
+        }
+
+            .terms-box a {
+                color: #ffdf00;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+
+        .btn-register {
+            width: 100%;
+            padding: 12px;
+            background-color: #ffdf00;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .btn-register:hover {
+                background-color: #ffd600;
+                transform: scale(1.05);
+            }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #111;
+            color: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 0 15px rgba(255, 223, 0, 0.6);
+            position: relative;
+        }
+
+            .modal-content h2 {
+                color: #ffdf00;
+                margin-bottom: 15px;
+            }
+
+            .modal-content ul {
+                margin-left: 20px;
+                margin-bottom: 15px;
+            }
+
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #ffdf00;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        function openModal() {
+            document.getElementById("termsModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("termsModal").style.display = "none";
+        }
+
+        function validateTerms() {
+            if (!document.getElementById("agreeTerms").checked) {
+                alert("You must agree to the Terms & Policies before registering.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+}

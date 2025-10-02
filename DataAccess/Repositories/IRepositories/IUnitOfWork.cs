@@ -14,5 +14,6 @@ namespace DataAccess.Repositories.IRepositories
         IAnswerOptionRepository AnswerOptionRepository { get; }
         IMatchResultRepository MatchResultRepository { get; }
         IFriendshipRepository FriendshipRepository { get; }
+        IApplicationUserOTPRepository ApplicationUserOTPRepository { get; }
     }
 }
