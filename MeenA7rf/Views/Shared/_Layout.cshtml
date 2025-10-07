@@ -225,7 +225,7 @@
 
                 @if(User.Identity!.IsAuthenticated)
                 {
-                    <li><a href="#">👤 Friends</a></li>
+                    <li><a asp-area="Customer" asp-controller="Friend" asp-action="Index">👤 Friends</a></li>
                     <li><a href="#">🧑 Profile</a></li>
                     <li><a asp-action="Signout" asp-controller="Account" asp-area="Identity" class="icon-login">Signout</a></li>
                 }
@@ -291,48 +291,80 @@
         })();
     </script>
 
-    <!-- Toaster Container (حطه في الـ _Layout.cshtml تحت <body> على طول) -->
+    <!-- ⚽ Custom Football Toaster -->
     <div id="custom-toaster"></div>
 
     <style>
-        /* 🎨 تصميم التوستر */
+        /* 🏟️ Container */
         #custom-toaster {
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 3000;
+            z-index: 4000;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
+        /* 💫 Toast Message */
         .toast-msg {
-            min-width: 280px;
-            padding: 15px 20px;
-            border-radius: 12px;
-            font-weight: bold;
+            min-width: 310px;
+            padding: 15px 18px;
+            border-radius: 14px;
             color: #fff;
             display: flex;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            animation: slideIn 0.6s ease, fadeOut 0.6s ease 3.5s forwards;
+            justify-content: space-between;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
             position: relative;
+            overflow: hidden;
+            animation: toastSlideIn 0.6s ease, fadeOut 0.6s ease 4.5s forwards;
+            font-family: "Poppins", sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
+            /* 🟢 Success */
             .toast-msg.success {
-                background: linear-gradient(135deg, #28a745, #1e7e34);
+                background: linear-gradient(135deg, #1ecf63, #0b9d47);
+                border-left: 6px solid #ffffff80;
             }
 
+            /* 🔴 Error */
             .toast-msg.error {
-                background: linear-gradient(135deg, #dc3545, #a71d2a);
+                background: linear-gradient(135deg, #ff4040, #a30000);
+                border-left: 6px solid #ffffff80;
             }
 
-            .toast-msg .icon {
-                font-size: 1.5rem;
+        /* ⚽ Icon Section */
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .toast-icon {
+            font-size: 1.8rem;
+            animation: bounceIcon 1.2s infinite ease-in-out;
+        }
+
+        /* ❌ Close Button */
+        .toast-close {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+            .toast-close:hover {
+                opacity: 1;
+                transform: scale(1.15);
             }
 
-        @@keyframes slideIn {
+        /* ✨ Animations */
+        @@keyframes toastSlideIn {
             from
 
         {
@@ -356,28 +388,53 @@
         }
 
         }
+
+        @@keyframes bounceIcon {
+            0%, 100%
+
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-4px);
+        }
+
+        }
     </style>
 
     <script>
         function showToaster(message, type) {
             const toaster = document.getElementById("custom-toaster");
 
-            // اختر أيقونة حسب النوع
-            let icon = type === "success" ? "⚽" : "🚫";
+            // ⚽ Choose icon based on type
+            let icon = type === "success" ? "🏆" : "🚫";
 
             const toast = document.createElement("div");
             toast.className = `toast-msg ${type}`;
-            toast.innerHTML = `<span class="icon">${icon}</span> <span>${message}</span>`;
+
+            toast.innerHTML = `
+                <div class="toast-content">
+                    <div class="toast-icon">${icon}</div>
+                    <div class="toast-text">${message}</div>
+                </div>
+                <div class="toast-close">&times;</div>
+            `;
+
+            // ❌ Close when clicking X
+            toast.querySelector(".toast-close").addEventListener("click", () => {
+                toast.remove();
+            });
 
             toaster.appendChild(toast);
 
-            // حذف بعد 4 ثواني
+            // Auto-remove after 5s
             setTimeout(() => {
                 toast.remove();
-            }, 4000);
+            }, 5000);
         }
 
-        // ✅ ده بيقرأ TempData من السيرفر (حطه في _Layout.cshtml تحت السكربتات)
+        // ⚡ Read from TempData (server messages)
         document.addEventListener("DOMContentLoaded", function () {
             var success = '@TempData["success-notification"]';
             var error = '@TempData["error-notification"]';

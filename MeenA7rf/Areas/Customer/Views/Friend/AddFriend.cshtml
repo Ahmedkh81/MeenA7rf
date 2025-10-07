@@ -1,0 +1,182 @@
+﻿@using Entities.Models
+@model List<ApplicationUser>
+
+<div class="add-friend-wrapper">
+    <h2 class="add-friend-title">Find Friends 🔍</h2>
+
+    <form asp-action="AddFriend" method="post" class="search-box">
+        <input type="text" name="search" placeholder="Search by username or email..." />
+        <button type="submit" class="btn btn-yellow">Search</button>
+    </form>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="friends-grid">
+            @foreach (var user in Model)
+            {
+                <div class="friend-card">
+                    <div class="friend-avatar">👤</div>
+                    <h4>@user.UserName</h4>
+                    <button class="btn btn-yellow send-request-btn" data-friend-id="@user.Id">➕ Add Friend</button>
+                </div>
+            }
+        </div>
+    }
+    else if (Model != null)
+    {
+        <p class="no-results">No users found ⚽</p>
+    }
+</div>
+
+<style>
+    :root {
+        --primary-gold: #ffd700;
+        --primary-blue: #007bff;
+        --danger-red: #e74c3c;
+        --dark-gray: #222;
+        --text-light: #f9f9f9;
+    }
+
+    .add-friend-wrapper {
+        max-width: 900px;
+        margin: 60px auto;
+        text-align: center;
+        color: var(--text-light);
+    }
+
+    .add-friend-title {
+        color: var(--primary-gold);
+        font-size: 2rem;
+        margin-bottom: 25px;
+    }
+
+    .search-box {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 35px;
+        flex-wrap: wrap;
+    }
+
+        .search-box input {
+            width: 300px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            backdrop-filter: blur(2px);
+        }
+
+            .search-box input::placeholder {
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+    .friends-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 20px;
+    }
+
+    .friend-card {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 20px;
+        transition: 0.25s ease;
+        backdrop-filter: blur(3px);
+    }
+
+        .friend-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.15);
+        }
+
+    .friend-avatar {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .friend-card h4 {
+        margin-bottom: 12px;
+        color: var(--primary-gold);
+        font-weight: 600;
+    }
+
+    .btn {
+        border: none;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.25s ease;
+        font-size: 0.9rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-yellow {
+        background: var(--primary-gold);
+        color: #000;
+    }
+
+    .btn-blue {
+        background: var(--primary-blue);
+        color: #fff;
+    }
+
+    .btn-red {
+        background: var(--danger-red);
+        color: #fff;
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+
+    .no-results {
+        margin-top: 25px;
+        color: rgba(255, 255, 255, 0.8);
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".send-request-btn").forEach(button => {
+            button.addEventListener("click", async function () {
+                const friendId = this.dataset.friendId;
+                const isCancel = this.classList.contains("btn-red");
+                const url = isCancel
+                    ? '/Customer/Friend/CancelRequest'
+                    : '/Customer/Friend/SendFriendRequest';
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ friendId })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    if (isCancel) {
+                        this.textContent = "➕ Add Friend";
+                        this.classList.remove("btn-red");
+                        this.classList.add("btn-yellow");
+                    } else {
+                        this.textContent = "❌ Cancel Request";
+                        this.classList.remove("btn-yellow");
+                        this.classList.add("btn-red");
+                    }
+                } else {
+                    alert(data.message || "Something went wrong!");
+                }
+            });
+        });
+    });
+</script>

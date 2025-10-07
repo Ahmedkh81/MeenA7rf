@@ -1,0 +1,192 @@
+﻿@using Entities.Models
+@model List<ApplicationUser>
+
+<div class="friends-wrapper">
+    <div class="friends-header">
+        <h2>Your Friends 👥</h2>
+        <div class="friends-actions">
+            <a asp-action="AddFriend" class="btn btn-yellow">🔍 Find Friends</a>
+            <a asp-action="Requests" class="btn btn-blue">💌 View Requests</a>
+        </div>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="no-friends">
+            <div class="empty-icon">😅</div>
+            <p>
+                You don't have any friends yet!<br />
+                <strong>Go add some ⚽</strong><br />
+                <span class="no-friends-arabic">مستني إيه يا نجم؟! يلا اغلب صحابك </span>
+            </p>
+            <a asp-action="AddFriend" class="btn btn-yellow">Start Adding Friends</a>
+        </div>
+    }
+    else
+    {
+        <div class="friends-grid">
+            @foreach (var friend in Model)
+            {
+                <div class="friend-card" data-friend-id="@friend.Id">
+                    <div class="friend-avatar">⚽</div>
+                    <h4 class="friend-name">@friend.UserName</h4>
+                    <div class="friend-actions">
+                        <form asp-action="DeleteFriend" method="post" style="display:inline;">
+                            <input type="hidden" name="friendId" value="@friend.Id" />
+                            <button type="submit" class="btn btn-red" onclick="return confirmDelete(event)">🗑️</button>
+                        </form>
+                        <form asp-action="BlockFriend" method="post" style="display:inline;">
+                            <input type="hidden" name="friendId" value="@friend.Id" />
+                            <button type="submit" class="btn btn-dark" onclick="return confirmBlock(event)">🚫</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    :root {
+        --primary-gold: #ffd700;
+        --primary-blue: #007bff;
+        --danger-red: #e74c3c;
+        --dark-gray: #222;
+        --text-light: #f9f9f9;
+    }
+
+    .friends-wrapper {
+        max-width: 1000px;
+        margin: 40px auto;
+        text-align: center;
+        color: var(--text-light);
+    }
+
+    .friends-header h2 {
+        color: var(--primary-gold);
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .friends-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+    }
+
+    .friends-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+    }
+
+    .friend-card {
+        background: rgba(0, 0, 0, 0.4); /* شفافة علشان الخلفية تبان */
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 20px;
+        transition: 0.25s ease;
+        backdrop-filter: blur(3px);
+    }
+
+        .friend-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.15);
+        }
+
+    .friend-avatar {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .friend-name {
+        color: var(--primary-gold);
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .friend-actions {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn {
+        border: none;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.25s ease;
+        font-size: 0.9rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-yellow {
+        background: var(--primary-gold);
+        color: #000;
+    }
+
+    .btn-blue {
+        background: var(--primary-blue);
+        color: #fff;
+    }
+
+    .btn-red {
+        background: var(--danger-red);
+        color: #fff;
+    }
+
+    .btn-dark {
+        background: var(--dark-gray);
+        color: #fff;
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+
+    .no-friends {
+        max-width: 400px;
+        margin: 60px auto;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 15px;
+        padding: 40px 25px;
+        backdrop-filter: blur(3px);
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+
+    .no-friends p {
+        margin-bottom: 20px;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.85);
+    }
+</style>
+
+<script>
+    function confirmDelete(event) {
+        event.preventDefault();
+        if (confirm('Are you sure you want to delete this friend?')) {
+            event.target.closest('form').submit();
+        }
+    }
+
+    function confirmBlock(event) {
+        event.preventDefault();
+        if (confirm('Are you sure you want to block this friend?')) {
+            event.target.closest('form').submit();
+        }
+    }
+</script>
