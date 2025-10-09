@@ -1,5 +1,5 @@
 ﻿@using Entities.Models
-@model List<ApplicationUser>
+@model List<(ApplicationUser User, FriendshipStatus? Status)>
 
 <div class="add-friend-wrapper">
     <h2 class="add-friend-title">Find Friends 🔍</h2>
@@ -12,12 +12,28 @@
     @if (Model != null && Model.Any())
     {
         <div class="friends-grid">
-            @foreach (var user in Model)
+            @foreach (var (user, status) in Model)
             {
                 <div class="friend-card">
                     <div class="friend-avatar">👤</div>
                     <h4>@user.UserName</h4>
-                    <button class="btn btn-yellow send-request-btn" data-friend-id="@user.Id">➕ Add Friend</button>
+
+                    @if (status == null)
+                    {
+                        <button class="btn btn-yellow send-request-btn" data-friend-id="@user.Id">➕ Add Friend</button>
+                    }
+                    else if (status == FriendshipStatus.Pending)
+                    {
+                        <button class="btn btn-red send-request-btn" data-friend-id="@user.Id">❌ Cancel Request</button>
+                    }
+                    else if (status == FriendshipStatus.Accepted)
+                    {
+                        <button class="btn btn-blue" disabled>👫 Friends</button>
+                    }
+                    else if (status == FriendshipStatus.Blocked)
+                    {
+                        <button class="btn btn-dark" disabled>🚫 Blocked</button>
+                    }
                 </div>
             }
         </div>
@@ -134,14 +150,14 @@
         color: #fff;
     }
 
+    .btn-dark {
+        background: var(--dark-gray);
+        color: #fff;
+    }
+
     .btn:hover {
         transform: scale(1.05);
         opacity: 0.9;
-    }
-
-    .no-results {
-        margin-top: 25px;
-        color: rgba(255, 255, 255, 0.8);
     }
 </style>
 

@@ -1,5 +1,6 @@
-﻿@using Entities.Models
-@model List<ApplicationUser>
+﻿@{
+    var friends = ViewBag.Friends as IEnumerable<dynamic>;
+}
 
 <div class="friends-wrapper">
     <div class="friends-header">
@@ -10,7 +11,7 @@
         </div>
     </div>
 
-    @if (Model == null || !Model.Any())
+    @if (friends == null || !friends.Any())
     {
         <div class="no-friends">
             <div class="empty-icon">😅</div>
@@ -25,20 +26,27 @@
     else
     {
         <div class="friends-grid">
-            @foreach (var friend in Model)
+            @foreach (var item in friends)
             {
+                var friend = item.Friend;
+                var status = item.Status;
+                var isBlocked = status == "Blocked";
+
                 <div class="friend-card" data-friend-id="@friend.Id">
                     <div class="friend-avatar">⚽</div>
                     <h4 class="friend-name">@friend.UserName</h4>
+                    <p class="friend-status">Status: @status</p>
                     <div class="friend-actions">
                         <form asp-action="DeleteFriend" method="post" style="display:inline;">
                             <input type="hidden" name="friendId" value="@friend.Id" />
                             <button type="submit" class="btn btn-red" onclick="return confirmDelete(event)">🗑️</button>
                         </form>
-                        <form asp-action="BlockFriend" method="post" style="display:inline;">
-                            <input type="hidden" name="friendId" value="@friend.Id" />
-                            <button type="submit" class="btn btn-dark" onclick="return confirmBlock(event)">🚫</button>
-                        </form>
+
+                        <button class="btn @(isBlocked ? "btn-yellow" : "btn-dark") block-btn"
+                                data-friend-id="@friend.Id"
+                                data-blocked="@(isBlocked.ToString().ToLower())">
+                            @(isBlocked ? "✅ Unblock" : "🚫 Block")
+                        </button>
                     </div>
                 </div>
             }
@@ -83,7 +91,7 @@
     }
 
     .friend-card {
-        background: rgba(0, 0, 0, 0.4); /* شفافة علشان الخلفية تبان */
+        background: rgba(0, 0, 0, 0.4);
         border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 15px;
         padding: 20px;
@@ -106,6 +114,12 @@
         color: var(--primary-gold);
         font-weight: 600;
         font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+
+    .friend-status {
+        color: #ccc;
+        font-size: 0.9rem;
         margin-bottom: 10px;
     }
 
@@ -173,6 +187,11 @@
         font-size: 1rem;
         color: rgba(255, 255, 255, 0.85);
     }
+
+    .btn-yellow:hover {
+        background: #ffef5c;
+        color: #000;
+    }
 </style>
 
 <script>
@@ -183,10 +202,48 @@
         }
     }
 
-    function confirmBlock(event) {
-        event.preventDefault();
-        if (confirm('Are you sure you want to block this friend?')) {
-            event.target.closest('form').submit();
-        }
-    }
+    document.querySelectorAll('.block-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const friendId = btn.dataset.friendId;
+
+            const confirmMsg = btn.dataset.blocked === "true"
+                ? 'Are you sure you want to unblock this friend?'
+                : 'Are you sure you want to block this friend?';
+
+            if (!confirm(confirmMsg)) return;
+
+            const response = await fetch('/Customer/Friend/BlockFriend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `friendId=${friendId}`
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                if (result.blocked) {
+                    // لو اتعمل بلوك
+                    btn.textContent = '✅ Unblock';
+                    btn.classList.remove('btn-dark');
+                    btn.classList.add('btn-yellow');
+                    btn.dataset.blocked = "true";
+                    btn.closest('.friend-card').querySelector('.friend-status').textContent = "Status: Blocked";
+                } else {
+                    // لو اتفك البلوك
+                    btn.textContent = '🚫 Block';
+                    btn.classList.remove('btn-yellow');
+                    btn.classList.add('btn-dark');
+                    btn.dataset.blocked = "false";
+                    btn.closest('.friend-card').querySelector('.friend-status').textContent = "Status: Accepted";
+                }
+
+                alert(result.message);
+            } else {
+                alert(result.message || 'Something went wrong.');
+            }
+        });
+    });
 </script>
